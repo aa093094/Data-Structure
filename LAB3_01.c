@@ -49,9 +49,9 @@ void poly_add(int start_1, int finish_1, int start_2, int finish_2, int start_3,
 		}
 		else if (polynomial[1][start_1] == polynomial[1][start_2])
 		{
-			if (polynomial[1][start_1] == 0 && polynomial[1][start_1] == 0)
+			if (polynomial[1][start_1] == 0 && polynomial[0][start_1] == 0)
 			{
-				if (polynomial[1][start_2] == 0 && polynomial[1][start_2] == 0)
+				if (polynomial[1][start_2] == 0 && polynomial[0][start_2] == 0)
 				{
 					break;
 				}
