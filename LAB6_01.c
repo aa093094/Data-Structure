@@ -1,156 +1,124 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-int isp[] = { 0, 19, 12, 12, 13, 13, 13 };
-int icp[] = { 20, 19, 12, 12, 13, 13, 13 };
-typedef enum { lparen, rparen, plus, minus, times, divide, mod, null, operand }precedence;
-char stack[50];
-int int_st[50] = { 0 };
-char expr_1[50];
-char expr_2[50];
-int n = 0;
-int top = -1;
+#include <ctype.h>
+#define MAX_SIZE 100
 
-precedence getToken(char symbol);
+int precedence(char op) {
+    if (op == '+' || op == '-')
+        return 1;
+    if (op == '*' || op == '/' || op == '%')
+        return 2;
+    return 0;
+}
+
+int isOperator(char ch) {
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%';
+}
+
+void infixToPostfix(char* infix, char* postfix) {
+    int i, j, top = -1;
+    char stack[MAX_SIZE], ch;
+
+    for (i = 0, j = 0; infix[i] != '\0'; i++) {
+        ch = infix[i];
+
+        if (isalnum(ch)) {
+            postfix[j++] = ch;
+        }
+        else if (ch == '(') {
+            stack[++top] = ch;
+        }
+        else if (ch == ')') {
+            while (top != -1 && stack[top] != '(') {
+                postfix[j++] = stack[top--];
+            }
+            top--; // remove the '(' from the stack
+        }
+        else if (isOperator(ch)) {
+            while (top != -1 && precedence(ch) <= precedence(stack[top])) {
+                postfix[j++] = stack[top--];
+            }
+            stack[++top] = ch;
+        }
+        else if (ch == ' ')
+        {
+
+        }
+        else {
+            printf("Error: Invalid character '%c'\n", ch);
+            exit(1);
+        }
+    }
+
+    while (top != -1) {
+        if (stack[top] == '(') {
+            printf("Error: Unmatched parentheses\n");
+            exit(1);
+        }
+        postfix[j++] = stack[top--];
+    }
+
+    postfix[j] = '\0';
+}
 
 int main()
 {
-	FILE* fp_1,* fp_2;
-	fp_1 = fopen("input.txt", "r");
-	fp_2 = fopen("output1.txt", "w");
-	memset(stack, '\0', sizeof(stack));
-	memset(expr_1, '\0', sizeof(expr_1));
-	memset(expr_2, '\0', sizeof(expr_1));
-	precedence token;
-	char symbol = '\0';
-	char a = '\0';
-	do
-	{
-		fscanf(fp_1, "%c", &symbol);
-		if (symbol == ' ')
-		{
-			continue;
-		}
-		else
-		{
-			expr_1[n] = symbol;
-			n++;
-		}
-	} while (a = fgetc(fp_1) != EOF);
-	symbol = '\0';
-	for(int i = 0; i < n; i++)
-	{
-		symbol = expr_1[i];
-		token = getToken(symbol);
-		if (token == operand)
-		{
-			fprintf(fp_2, "%c", symbol);
-		}
-		else if (token == rparen)
-		{
-			while (stack[top] != '(')
-			{
-				fprintf(fp_2, "%c", stack[top]);
-				stack[top] = '\0';
-				top--;
-			}
-			stack[top] = '\0';
-			top--;
-		}
-		else if (token == null)
-		{
-			continue;
-		}
-		else
-		{
-			if (top == -1)
-			{
-				top++;
-				stack[top] = symbol;
-			}
-			else
-			{
-				precedence tp_tk = getToken(stack[top]);
-				while (isp[tp_tk] >= icp[token])
-				{
-					fprintf(fp_2, "%c", stack[top]);
-					stack[top] = '\0';
-					top--;
-					tp_tk = getToken(stack[top]);
-				}
-				top++;
-				stack[top] = symbol;
-			}
-		}
-	}
+    FILE* fp, * fp_w, * fp_w2;
+    char infix[MAX_SIZE], postfix[MAX_SIZE];
 
-	while (top != -1)
-	{
-		fprintf(fp_2, "%c", stack[top]);
-		stack[top] = '\0';
-		top--;
-	}
-	fprintf(fp_2, "\n");
-	fclose(fp_1);
-	fclose(fp_2);
-	FILE* fp_3,* fp_4;
-	fp_3 = fopen("output1.txt", "r");
-	char str[50] = "";
-	fscanf(fp_3, "%s", str);
-	strcpy(expr_2, str);
-	int len = strlen(expr_2);
-	int op1, op2;
-	for (int j = 0; j < len; j++)
-	{
-		symbol = expr_2[j];
-		token = getToken(symbol);
-		if (token == operand)
-		{
-			int_st[++top] = symbol - '0';
-		}
-		else
-		{
-			op2 = int_st[top];
-			int_st[top] = 0;
-			top--;
-			op1 = int_st[top];
-			stack[top] = 0;
-			top--;
-			switch (token)
-			{
-			case plus:int_st[++top] = op1 + op2;
-				break;
-			case minus:int_st[++top] = op1 - op2;
-				break;
-			case times:int_st[++top] = op1 * op2;
-				break;
-			case divide:int_st[++top] = op1 / op2;
-				break;
-			case mod:int_st[++top] = op1 % op2;
-			}
-		}
-	}
-	fclose(fp_3);
-	fp_4 = fopen("output2.txt", "w");
-	fprintf(fp_4, "%d", int_st[top]);
-	fclose(fp_4);
+    fp = fopen("input.txt", "r");
+    fp_w = fopen("output1.txt", "w");
+    if (fp == NULL) {
+        printf("Error: Could not open file.\n");
+        return 1;
+    }
 
-	return 0;
-}
+    fgets(infix, MAX_SIZE, fp);
+    infixToPostfix(infix, postfix);
 
-precedence getToken(char symbol)
-{
-	switch (symbol)
-	{
-	case '(':return lparen;
-	case ')':return rparen;
-	case '+':return plus;
-	case '-':return minus;
-	case '/':return divide;
-	case '*':return times;
-	case '%':return mod;
-	case '\0':return null;
-	default:return operand;
-	}
+    fprintf(fp_w, "%s", postfix);
+    fp_w2 = fopen("output2.txt", "w");
+    char symbol;
+    int len = strlen(postfix);
+    int int_st[MAX_SIZE] = { 0 };
+    int top = -1;
+    int op1, op2;
+    for (int j = 0; j < len; j++)
+    {
+        symbol = postfix[j];
+        if (isalnum(symbol)) {
+            int_st[++top] = symbol - '0';
+        }
+        else
+        {
+            
+                op2 = int_st[top];
+                int_st[top] = 0;
+                top--;
+                op1 = int_st[top];
+                int_st[top] = 0;
+                top--;
+                switch (symbol)
+                {
+                case '+':int_st[++top] = op1 + op2;
+                    break;
+                case '-':int_st[++top] = op1 - op2;
+                    break;
+                case '*':int_st[++top] = op1 * op2;
+                    break;
+                case '/':int_st[++top] = op1 / op2;
+                    break;
+                case '%':int_st[++top] = op1 % op2;
+                }
+            
+        }
+    }
+    fprintf(fp_w2, "%d", int_st[top]);
+
+    fclose(fp);
+    fclose(fp_w);
+    fclose(fp_w2);
+
+    return 0;
 }
