@@ -29,7 +29,7 @@ int main()
 	arr_2 = (int**)malloc(rows * sizeof(int*));
 	for (int p = 0; p < rows; p++)
 	{
-		arr_1[p] = (int*)malloc(cols * sizeof(int*));
+		arr_2[p] = (int*)malloc(cols * sizeof(int*));
 	}
 	for (int p = 0; p < rows; p++)
 	{
@@ -41,7 +41,7 @@ int main()
 	arr_3 = (int**)malloc(rows * sizeof(int*));
 	for (int k = 0; k < rows; k++)
 	{
-		arr_1[k] = (int*)malloc(cols * sizeof(int*));
+		arr_3[k] = (int*)malloc(cols * sizeof(int*));
 	}
 	fp_2 = fopen("output.txt", "w");
 	matrix_addtion(arr_1, arr_2, arr_3, rows, cols);
@@ -53,6 +53,8 @@ int main()
 		}
 		fprintf(fp_2, "\n");
 	}
+	free(arr_1);
+	free(arr_2);
 	free(arr_3);
 	fclose(fp_1);
 	fclose(fp_2);
