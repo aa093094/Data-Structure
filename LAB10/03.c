@@ -112,7 +112,7 @@ int main()
 			break;
 		}
 	}
-	printf("���� ���� �ٰ� ���� ������ �ٸ� ���\n");
+	printf("Print left and right components\n");
 	for (ListPointer temp = head; temp != NULL; temp = temp->llink)
 	{
 		printf("%d->", temp->data);
