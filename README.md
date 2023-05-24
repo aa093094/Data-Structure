@@ -1,2 +1,2 @@
-# Data-Structure
-These are codes that I coded at Data Structure class.
+# Data-Structure-in-C
+These are codes that I coded with C at Data Structure class.
