@@ -6,17 +6,17 @@
 typedef struct ListNode
 {
 	int data;
-	struct ListNode* link;
+	struct ListNode *link;
 } ListNode;
 
 int main()
 {
-	FILE* fp_r, * fp_w;
+	FILE *fp_r, *fp_w;
 	int size = 0;
 	fp_r = fopen("input.txt", "r");
 	fscanf(fp_r, "%d", &size);
 	short int out[50];
-	ListNode* seq[50];
+	ListNode *seq[50];
 	int num_list[50];
 	memset(num_list, -1, 50);
 	int e_class[50][50];
@@ -27,18 +27,18 @@ int main()
 		seq[i] = NULL;
 	}
 	int p = 0, q = 0, k = 0;
-	ListNode* x,* y,* top;
+	ListNode *x, *y, *top;
 	char equal;
 	for (int j = 0; j < size; j++)
 	{
 		fscanf(fp_r, "%d %c %d", &p, &equal, &q);
 		num_list[k++] = p;
 		num_list[k++] = q;
-		x = (ListNode*)malloc(sizeof(ListNode));
+		x = (ListNode *)malloc(sizeof(ListNode));
 		x->data = q;
 		x->link = seq[p];
 		seq[p] = x;
-		x = (ListNode*)malloc(sizeof(ListNode));
+		x = (ListNode *)malloc(sizeof(ListNode));
 		x->data = p;
 		x->link = seq[q];
 		seq[q] = x;
@@ -97,7 +97,8 @@ int main()
 						x = x->link;
 					}
 				}
-				if (!top)break;
+				if (!top)
+					break;
 				x = seq[top->data];
 				top = top->link;
 			}
