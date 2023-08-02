@@ -1,0 +1,1 @@
+LAB17 is about Kruskal and Prim Algorithm
