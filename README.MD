@@ -6,6 +6,6 @@ LAB05 ~ LAB07 - Stacks and Queues\
 LAB07 ~ LAB09 - Linked Lists\
 LAB10 ~ LAB15 - Trees\
 LAB16 ~ LAB17 - Graphs\
-LAB18 - Sorts\
-LAB19 - Hash\
-LAB20 ~ LAB21 - Efficient binary search trees
+LAB18 - Sorting\
+LAB19 - Hashing\
+LAB20 ~ LAB21 - Efficient binary search tree
