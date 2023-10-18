@@ -1,4 +1,4 @@
-# Data-Structure-in-C
+# Data_Structure_in_C
 These are codes that I coded with C at Data Structure class.\
 LAB01 - Basic concepts and FILE I/O\
 LAB02 ~ LAB04 - Arrays and Structures\
